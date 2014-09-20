@@ -94,6 +94,15 @@ IniLexer::~IniLexer(void) {
 }
 
 bool IniLexer::Open(const char* fname) {
+  file_.reset(fopen(fname, "r"), fclose);
+  if (!file_)
+    return false;
+
+  lineno_ = 1;
+  bsize_  = 0;
+  eof_    = false;
+  lexpos_ = 0;
+
   return true;
 }
 
@@ -102,6 +111,35 @@ void IniLexer::Close(void) {
 
 Token::Type IniLexer::GetToken(Token& token) {
   Token::Type type = Token::Type::TYPE_ERR;
+  State state = State::STATE_BEGIN;
+  bool  save;
+  int   c;
+
+  token.value.clear();
+  while (State::STATE_FINISH != state) {
+    c = GetChar();
+    save = true;
+
+    switch (state) {
+    case State::STATE_BEGIN:
+      type = LexerBegin(c, state, save);
+      break;
+    case State::STATE_FINISH:
+      type = LexerFinish(c, state, save);
+      break;
+    case State::STATE_VALUE:
+      type = LexerValue(c, state, save);
+      break;
+    case State::STATE_COMMENT:
+      type = LexerComment(c, state, save);
+      break;
+    }
+
+    if (save)
+      token.value += static_cast<char>(c);
+    if (State::STATE_FINISH == state)
+      token.type = type;
+  }
 
   return type;
 }
@@ -130,28 +168,78 @@ Token::Type IniLexer::LexerBegin(
     int c, State& out_state, bool& out_save) {
   Token::Type type = Token::Type::TYPE_ERR;
 
+  if (' ' == c || '\t' == c) {
+    out_save = false;
+  }
+  else if ('\n' == c) {
+    out_save = false;
+    ++lineno_;
+  }
+  else if ('#' == c) {
+    out_state = State::STATE_COMMENT;
+    out_save = false;
+  }
+  else if ('[' == c) {
+    out_state = State::STATE_FINISH;
+    type = Token::Type::TYPE_LBRACKET;
+  }
+  else if (']' == c) {
+    out_state = State::STATE_FINISH;
+    type = Token::Type::TYPE_RBRACKET;
+  }
+  else if ('=' == c) {
+    out_state = State::STATE_FINISH;
+    type = Token::Type::TYPE_ASSIGN;
+  }
+  else if (EOF == c) {
+    out_state = State::STATE_FINISH;
+    out_save = false;
+    type = Token::Type::TYPE_EOF;
+  }
+  else {
+    out_state = State::STATE_VALUE;
+  }
+
   return type;
 }
 
 Token::Type IniLexer::LexerFinish(
     int c, State& out_state, bool& out_save) {
-  Token::Type type = Token::Type::TYPE_ERR;
+  out_state = State::STATE_FINISH;
+  out_save = false;
 
-  return type;
+  return Token::Type::TYPE_ERR;;
 }
 
 Token::Type IniLexer::LexerValue(
     int c, State& out_state, bool& out_save) {
-  Token::Type type = Token::Type::TYPE_ERR;
+  if (' ' == c || '\t' == c || '\n' == c 
+      || '#' == c || '=' == c || ']' == c) {
+    if ('\n' == c || '#' == c || '=' == c || ']' == c)
+      UngetChar();
 
-  return type;
+    out_state = State::STATE_FINISH;
+    out_save = false;
+
+    return Token::Type::TYPE_VALUE;
+  }
+
+  return Token::Type::TYPE_ERR;
 }
 
 Token::Type IniLexer::LexerComment(
     int c, State& out_state, bool& out_save) {
-  Token::Type type = Token::Type::TYPE_ERR;
+  out_save = false;
+  if (EOF == c) {
+    out_state = State::STATE_FINISH;
+    return Token::Type::TYPE_EOF;
+  }
+  else if ('\n' == c) {
+    ++lineno_;
+    out_state = State::STATE_BEGIN;
+  }
 
-  return type;
+  return Token::Type::TYPE_ERR;
 }
 
 
@@ -181,7 +269,7 @@ void IniParser::Parse(void) {
 void IniParser::ParseSection(void) {
 }
 
-void IniParser::ParseValue(void) {
+void IniParser::ParseValue(const std::string& value) {
 }
 
 }

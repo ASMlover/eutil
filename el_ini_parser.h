@@ -49,7 +49,7 @@ public:
 private:
   void Parse(void);
   void ParseSection(void);
-  void ParseValue(void);
+  void ParseValue(const std::string& value);
 };
 
 }

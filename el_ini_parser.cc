@@ -29,21 +29,16 @@
 
 namespace el {
 
-struct Token {
-  enum class Type {
-    TYPE_ERR = 0, 
-    TYPE_EOF, 
-    TYPE_COMMENT, 
+enum class Type {
+  TYPE_ERR = 0, 
+  TYPE_EOF, 
+  TYPE_COMMENT,
 
-    TYPE_VALUE, 
+  TYPE_VALUE, 
 
-    TYPE_LBRACKET, 
-    TYPE_RBRACKET, 
-    TYPE_ASSIGN,
-  };
-
-  Type        type;
-  std::string value;
+  TYPE_LBRACKET,
+  TYPE_RBRACKET, 
+  TYPE_ASSIGN,
 };
 
 class IniLexer : private UnCopyable {
@@ -71,15 +66,15 @@ public:
   bool Open(const char* fname);
   void Close(void);
 
-  Token::Type GetToken(Token& token);
+  Type GetToken(std::string& token);
 private:
   int GetChar(void);
   void UngetChar(void);
 
-  Token::Type LexerBegin(int c, State& out_state, bool& out_save);
-  Token::Type LexerFinish(int c, State& out_state, bool& out_save);
-  Token::Type LexerValue(int c, State& out_state, bool& out_save);
-  Token::Type LexerComment(int c, State& out_state, bool& out_save);
+  Type LexerBegin(int c, State& out_state, bool& out_save);
+  Type LexerFinish(int c, State& out_state, bool& out_save);
+  Type LexerValue(int c, State& out_state, bool& out_save);
+  Type LexerComment(int c, State& out_state, bool& out_save);
 };
 
 IniLexer::IniLexer(void)
@@ -109,13 +104,13 @@ bool IniLexer::Open(const char* fname) {
 void IniLexer::Close(void) {
 }
 
-Token::Type IniLexer::GetToken(Token& token) {
-  Token::Type type = Token::Type::TYPE_ERR;
+Type IniLexer::GetToken(std::string& token) {
+  Type type = Type::TYPE_ERR;
   State state = State::STATE_BEGIN;
   bool  save;
   int   c;
 
-  token.value.clear();
+  token.clear();
   while (State::STATE_FINISH != state) {
     c = GetChar();
     save = true;
@@ -136,9 +131,7 @@ Token::Type IniLexer::GetToken(Token& token) {
     }
 
     if (save)
-      token.value += static_cast<char>(c);
-    if (State::STATE_FINISH == state)
-      token.type = type;
+      token += static_cast<char>(c);
   }
 
   return type;
@@ -164,9 +157,9 @@ void IniLexer::UngetChar(void) {
     --lexpos_;
 }
 
-Token::Type IniLexer::LexerBegin(
+Type IniLexer::LexerBegin(
     int c, State& out_state, bool& out_save) {
-  Token::Type type = Token::Type::TYPE_ERR;
+  Type type = Type::TYPE_ERR;
 
   if (' ' == c || '\t' == c) {
     out_save = false;
@@ -181,20 +174,20 @@ Token::Type IniLexer::LexerBegin(
   }
   else if ('[' == c) {
     out_state = State::STATE_FINISH;
-    type = Token::Type::TYPE_LBRACKET;
+    type = Type::TYPE_LBRACKET;
   }
   else if (']' == c) {
     out_state = State::STATE_FINISH;
-    type = Token::Type::TYPE_RBRACKET;
+    type = Type::TYPE_RBRACKET;
   }
   else if ('=' == c) {
     out_state = State::STATE_FINISH;
-    type = Token::Type::TYPE_ASSIGN;
+    type = Type::TYPE_ASSIGN;
   }
   else if (EOF == c) {
     out_state = State::STATE_FINISH;
     out_save = false;
-    type = Token::Type::TYPE_EOF;
+    type = Type::TYPE_EOF;
   }
   else {
     out_state = State::STATE_VALUE;
@@ -203,15 +196,15 @@ Token::Type IniLexer::LexerBegin(
   return type;
 }
 
-Token::Type IniLexer::LexerFinish(
+Type IniLexer::LexerFinish(
     int c, State& out_state, bool& out_save) {
   out_state = State::STATE_FINISH;
   out_save = false;
 
-  return Token::Type::TYPE_ERR;;
+  return Type::TYPE_ERR;;
 }
 
-Token::Type IniLexer::LexerValue(
+Type IniLexer::LexerValue(
     int c, State& out_state, bool& out_save) {
   if (' ' == c || '\t' == c || '\n' == c 
       || '#' == c || '=' == c || ']' == c) {
@@ -221,25 +214,25 @@ Token::Type IniLexer::LexerValue(
     out_state = State::STATE_FINISH;
     out_save = false;
 
-    return Token::Type::TYPE_VALUE;
+    return Type::TYPE_VALUE;
   }
 
-  return Token::Type::TYPE_ERR;
+  return Type::TYPE_ERR;
 }
 
-Token::Type IniLexer::LexerComment(
+Type IniLexer::LexerComment(
     int c, State& out_state, bool& out_save) {
   out_save = false;
   if (EOF == c) {
     out_state = State::STATE_FINISH;
-    return Token::Type::TYPE_EOF;
+    return Type::TYPE_EOF;
   }
   else if ('\n' == c) {
     ++lineno_;
     out_state = State::STATE_BEGIN;
   }
 
-  return Token::Type::TYPE_ERR;
+  return Type::TYPE_ERR;
 }
 
 

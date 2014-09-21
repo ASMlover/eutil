@@ -245,24 +245,65 @@ IniParser::~IniParser(void) {
 }
 
 bool IniParser::Open(const char* fname) {
+  if (!lexer_->Open(fname))
+    return false;
+  section_ = "";
+  values_.clear();
+
+  Parse();
+
   return true;
 }
 
 void IniParser::Close(void) {
+  if (lexer_) {
+    lexer_->Close();
+
+    section_ = "";
+    values_.clear();
+  }
 }
 
 std::string IniParser::Get(
     const std::string& section, const std::string& key) {
-  return "";
+  std::string value_key(section + key);
+
+  IniValueMap::iterator found(values_.find(value_key));
+  if (found != values_.end())
+    return (*found).second;
+
+  return std::string("");
 }
 
 void IniParser::Parse(void) {
+  std::string token;
+  Type type;
+  do {
+    type = lexer_->GetToken(token);
+    if (Type::TYPE_LBRACKET == type)
+      ParseSection();
+    else if (Type::TYPE_VALUE == type)
+      ParseValue(token);
+  } while(Type::TYPE_EOF != type);
 }
 
 void IniParser::ParseSection(void) {
+  std::string token;
+  Type type = lexer_->GetToken(token);
+  EL_ASSERT(Type::TYPE_VALUE == type);
+
+  section_ = token;
+  EL_ASSERT(Type::TYPE_RBRACKET == lexer_->GetToken(token));
 }
 
 void IniParser::ParseValue(const std::string& value) {
+  std::string token;
+  EL_ASSERT(Type::TYPE_ASSIGN == lexer_->GetToken(token));
+
+  EL_ASSERT(Type::TYPE_VALUE == lexer_->GetToken(token));
+
+  std::string key(section_ + value);
+  values_.insert(std::make_pair(key, token));
 }
 
 }

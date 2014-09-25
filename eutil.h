@@ -61,6 +61,8 @@
 # include <process.h>
 # include <io.h>
 # include <direct.h>
+
+# define __func__ __FUNCTION__
 #elif defined(EUTIL_LINUX)
 # include <sys/types.h>
 # include <sys/time.h>
@@ -99,19 +101,26 @@
 // optomized away in a release build.
 #if !defined(EL_ASSERT)
 # include "el_io.h"
-# define EL_ASSERT(expr) do {\
-    if (!(expr)) {\
+# define EL_ASSERT(condition, ...) do {\
+    if (!(condition)) {\
       el::ColorFprintf(stderr, \
           el::ColorType::COLORTYPE_RED, \
-          "Assertion failed in %s on %d : %s\n", \
+          "[%s:%d] Assertion failed in %s(): %s -> %s\n", \
           __FILE__, \
           __LINE__, \
-          #expr);\
+          __func__, \
+          #condition, \
+          ##__VA_ARGS__);\
       fflush(stderr);\
       abort();\
     }\
   } while (0)
 #endif
+
+// Assertion to indicate that the given point in 
+// the code should never be reached.
+#define EL_UNREACHABLE()\
+  EL_ASSERT(false, "This line shuld not be reached.")
 
 #if !defined(MIN)
 # define MIN(x, y)  ((x) < (y) ? (x) : (y))

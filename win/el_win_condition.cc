@@ -129,7 +129,8 @@ void Condition::Wait(void) {
 }
 
 void Condition::TimedWait(uint64_t timeout) {
-  EL_ASSERT(0 == CondWaitHelper(cond_, mutex_, timeout));
+  EL_ASSERT(0 == CondWaitHelper(
+        cond_, mutex_, static_cast<DWORD>(timeout)));
 }
 
 }

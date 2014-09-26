@@ -101,26 +101,39 @@
 // optomized away in a release build.
 #if !defined(EL_ASSERT)
 # include "el_io.h"
-# define EL_ASSERT(condition, ...) do {\
+# define EL_ASSERT(condition) do {\
     if (!(condition)) {\
       el::ColorFprintf(stderr, \
           el::ColorType::COLORTYPE_RED, \
-          "[%s:%d] Assertion failed in %s(): %s -> %s\n", \
+          "[%s:%d] Assertion failed in %s(): %s\n", \
           __FILE__, \
           __LINE__, \
           __func__, \
-          #condition, \
-          ##__VA_ARGS__);\
+          #condition);\
       fflush(stderr);\
       abort();\
     }\
   } while (0)
 #endif
 
+#define EL_ASSERTX(condition, message) do {\
+  if (!(condition)) {\
+    el::ColorFprintf(stderr, \
+        el::ColorType::COLORTYPE_RED, \
+        "[%s:%d] Assertion failed in %s(): %s\n", \
+        __FILE__, \
+        __LINE__, \
+        __func__, \
+        (message));\
+    fflush(stderr);\
+    abort();\
+  }\
+} while (0)
+
 // Assertion to indicate that the given point in 
 // the code should never be reached.
 #define EL_UNREACHABLE()\
-  EL_ASSERT(false, "This line shuld not be reached.")
+  EL_ASSERTX(false, "This line shuld not be reached.")
 
 #if !defined(MIN)
 # define MIN(x, y)  ((x) < (y) ? (x) : (y))

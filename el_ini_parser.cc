@@ -30,25 +30,25 @@
 namespace el {
 
 enum class Type {
-  TYPE_ERR = 0, 
-  TYPE_EOF, 
+  TYPE_ERR = 0,
+  TYPE_EOF,
   TYPE_COMMENT,
 
-  TYPE_VALUE, 
+  TYPE_VALUE,
 
   TYPE_LBRACKET,
-  TYPE_RBRACKET, 
+  TYPE_RBRACKET,
   TYPE_ASSIGN,
 };
 
 class IniLexer : private UnCopyable {
   enum {BSIZE = 256};
   enum class State {
-    STATE_BEGIN = 0, 
-    STATE_FINISH, 
+    STATE_BEGIN = 0,
+    STATE_FINISH,
 
-    STATE_VALUE, 
-    STATE_COMMENT, 
+    STATE_VALUE,
+    STATE_COMMENT,
   };
 
   typedef std::shared_ptr<FILE> FilePtr;
@@ -206,7 +206,7 @@ Type IniLexer::LexerFinish(
 
 Type IniLexer::LexerValue(
     int c, State& out_state, bool& out_save) {
-  if (' ' == c || '\t' == c || '\n' == c 
+  if (' ' == c || '\t' == c || '\n' == c
       || '#' == c || '=' == c || ']' == c) {
     if ('\n' == c || '#' == c || '=' == c || ']' == c)
       UngetChar();

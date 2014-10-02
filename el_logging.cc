@@ -69,7 +69,7 @@ class LogFile : private UnCopyable {
   }
 
   inline bool operator==(const Date& date) const {
-    return (date_.year == date.year 
+    return (date_.year == date.year
         && date_.mon == date.mon
         && date_.day == date.day);
   }
@@ -139,7 +139,7 @@ FILE* Logging::GetStream(SeverityType severity) {
     CreateLogDirectory(directory);
 
     char fname[MAX_PATH];
-    snprintf(fname, MAX_PATH, "./%s/%s/%04d%02d%02d.log", 
+    snprintf(fname, MAX_PATH, "./%s/%s/%04d%02d%02d.log",
         ROOT_DIR, directory, date.year, date.mon, date.day);
     stream = file->Set(date, fname);
   }
@@ -154,7 +154,7 @@ void Logging::Write(SeverityType severity, const char* format, ...) {
   FILE* stream = GetStream(severity);
   if (nullptr == stream)
     return;
-  fprintf(stream, "[%02d:%02d:%02d.%03d] ", 
+  fprintf(stream, "[%02d:%02d:%02d.%03d] ",
       time.hour, time.min, time.sec, time.millitm);
 
   va_list ap;
@@ -163,7 +163,7 @@ void Logging::Write(SeverityType severity, const char* format, ...) {
   va_end(ap);
 }
 
-void Logging::WriteX(SeverityType severity, 
+void Logging::WriteX(SeverityType severity,
     const char* file, int line, const char* format, ...) {
   Time time;
   GetTime(time);
@@ -171,7 +171,7 @@ void Logging::WriteX(SeverityType severity,
   FILE* stream = GetStream(severity);
   if (nullptr == stream)
     return;
-  fprintf(stream, "[%02d:%02d:%02d.%03d] %s(%d): ", 
+  fprintf(stream, "[%02d:%02d:%02d.%03d] %s(%d): ",
       time.hour, time.min, time.sec, time.millitm, file, line);
 
   va_list ap;

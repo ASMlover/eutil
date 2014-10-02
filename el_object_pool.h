@@ -39,10 +39,10 @@ class ObjectPool : private UnCopyable {
   std::queue<T*>          free_list_;
   std::vector<TSharesPtr> all_objects_;
 public:
-  explicit ObjectPool(uint32_t chunk_size = DEFAULT_OBJCOUNT) 
+  explicit ObjectPool(uint32_t chunk_size = DEFAULT_OBJCOUNT)
     throw(std::invalid_argument, std::bad_alloc)
     : chunk_size_(chunk_size) {
-    if (0 == chunk_size_) 
+    if (0 == chunk_size_)
       throw std::invalid_argument("chunk size must be positive");
 
     AllocateChunk();

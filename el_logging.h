@@ -30,11 +30,11 @@
 namespace el {
 
 enum class SeverityType {
-  SEVERITYTYPE_DEBUG = 0, 
-  SEVERITYTYPE_MESSAGE, 
-  SEVERITYTYPE_WARNING, 
-  SEVERITYTYPE_ERROR, 
-  SEVERITYTYPE_FAIL, 
+  SEVERITYTYPE_DEBUG = 0,
+  SEVERITYTYPE_MESSAGE,
+  SEVERITYTYPE_WARNING,
+  SEVERITYTYPE_ERROR,
+  SEVERITYTYPE_FAIL,
 };
 
 class LogFile;
@@ -45,14 +45,14 @@ class Logging : public Singleton<Logging> {
 #else
   typedef std::map<SeverityType, LogFilePtr>            LogFileMap;
 #endif
-  
+
   LogFileMap files_;
 public:
   Logging(void);
   ~Logging(void);
 
   void Write(SeverityType severity, const char* format, ...);
-  void WriteX(SeverityType severity, 
+  void WriteX(SeverityType severity,
       const char* file, int line, const char* format, ...);
 private:
   const char* GetSeverityName(SeverityType severity);

@@ -103,7 +103,7 @@
 #include <queue>
 #include <vector>
 
-// Have our own assert, so we are sure it does not get 
+// Have our own assert, so we are sure it does not get
 // optomized away in a release build.
 #if !defined(EL_ASSERT)
 # include "el_io.h"
@@ -136,7 +136,7 @@
   }\
 } while (0)
 
-// Assertion to indicate that the given point in 
+// Assertion to indicate that the given point in
 // the code should never be reached.
 #define EL_UNREACHABLE()\
   EL_ASSERTX(false, "This line shuld not be reached.")

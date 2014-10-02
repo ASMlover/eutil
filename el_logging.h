@@ -42,7 +42,7 @@ class Logging : public Singleton<Logging> {
   typedef std::shared_ptr<LogFile>                      LogFilePtr;
 #if defined(EUTIL_WIN)
   typedef std::unordered_map<SeverityType, LogFilePtr>  LogFileMap;
-#elif defined(EUTIL_LINUX)
+#else
   typedef std::map<SeverityType, LogFilePtr>            LogFileMap;
 #endif
   

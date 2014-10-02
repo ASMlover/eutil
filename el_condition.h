@@ -34,7 +34,7 @@
     HANDLE           single_event;
     HANDLE           broadcast_event;
   } CondVar;
-#elif defined(EUTIL_LINUX)
+#else
   typedef pthread_cond_t CondVar;
 #endif
 

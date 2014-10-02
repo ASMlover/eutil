@@ -27,21 +27,23 @@
 #ifndef __EUTIL_HEADER_H__
 #define __EUTIL_HEADER_H__
 
-#if !defined(EUTIL_WIN) && !defined(EUTIL_LINUX)
+#if !defined(EUTIL_WIN) && !defined(EUTIL_LINUX) && !defined(EUTIL_MAC)
 # if defined(_WINDOWS_) || defined(_MSC_VER) || defined(__MINGW32)
 #   define EUTIL_WIN
 # elif defined(WIN32_LEAN_AND_MEAN)
 #   define EUTIL_WIN
-# elif defined(__linux__) || defined(__GNUC__)
+# elif defined(__linux__)
 #   define EUTIL_LINUX
+# elif defined(__APPLE__) || defined(__MACH__)
+#   define EUTIL_MAC
 # else
 #   error "DOES NOT SUPPORT THIS PLATFORM !!!"
 # endif
 #endif
 
-#if defined(_MSC_VER)
+#if defined(EUTIL_WIN) && defined(_MSC_VER)
 # define COMPILER_MSVC
-#elif defined(__GNUC__)
+#elif defined(EUTIL_LINUX) && defined(__GNUC__)
 # define COMPILER_GCC
 #endif
 
@@ -63,7 +65,7 @@
 # include <direct.h>
 
 # define __func__ __FUNCTION__
-#elif defined(EUTIL_LINUX)
+#else
 # include <sys/types.h>
 # include <sys/time.h>
 # include <sys/stat.h>
@@ -73,6 +75,10 @@
 # include <limits.h>
 
 # define MAX_PATH PATH_MAX
+# if defined(EUTIL_MAC)
+#   include <mach/mach.h>
+#   include <mach/mach_time.h>
+# endif
 #endif
 
 // ANSI C HEADERS

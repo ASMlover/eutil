@@ -53,6 +53,7 @@ public:
   }
 };
 
+#if defined(EUTIL_LINUX)
 class SpinLock : private UnCopyable {
   pthread_spinlock_t spinlock_;
 public:
@@ -72,6 +73,27 @@ public:
     EL_ASSERT(0 == pthread_spin_unlock(&spinlock_));
   }
 };
+#elif defined(EUTIL_MAC)
+class SpinLock : private UnCopyable {
+  pthread_mutex_t spinlock_;
+public:
+  SpinLock(void) {
+    EL_ASSERT(0 == pthread_mutex_init(&spinlock_, nullptr));
+  }
+
+  ~SpinLock(void) {
+    EL_ASSERT(0 == pthread_mutex_destroy(&spinlock_));
+  }
+
+  inline void Lock(void) {
+    EL_ASSERT(0 == pthread_mutex_lock(&spinlock_));
+  }
+
+  inline void Unlock(void) {
+    EL_ASSERT(0 == pthread_mutex_unlock(&spinlock_));
+  }
+};
+#endif
 
 }
 

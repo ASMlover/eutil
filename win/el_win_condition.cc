@@ -72,7 +72,7 @@ static int CondWaitHelper(
   bool last_waiter = false;
   EnterCriticalSection(&cond.waiters_count_lock);
   --cond.waiters_count;
-  last_waiter = (((WAIT_OBJECT_0 + 1) == result) 
+  last_waiter = (((WAIT_OBJECT_0 + 1) == result)
       || (0 == cond.waiters_count));
   LeaveCriticalSection(&cond.waiters_count_lock);
 
@@ -91,7 +91,7 @@ static int CondWaitHelper(
 }
 
 
-Condition::Condition(Mutex& mutex) 
+Condition::Condition(Mutex& mutex)
   : mutex_(mutex) {
   EL_ASSERT(0 == CondInit(cond_));
 }

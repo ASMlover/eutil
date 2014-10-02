@@ -32,15 +32,15 @@ UNIT_IMPL(IniParser) {
 
   EL_ASSERT(parser.Open("./test/ini_parser.ini"));
 
-  UNIT_PRINT("SECTION1.key1 = %s\n", 
+  UNIT_PRINT("SECTION1.key1 = %s\n",
       parser.Get("SECTION1", "key1").c_str());
-  UNIT_PRINT("SECTION1.key2 = %s\n", 
+  UNIT_PRINT("SECTION1.key2 = %s\n",
       parser.Get("SECTION1", "key2").c_str());
-  UNIT_PRINT("SECTION1.key3 = %s\n", 
+  UNIT_PRINT("SECTION1.key3 = %s\n",
       parser.Get("SECTION1", "key3").c_str());
-  UNIT_PRINT("SECTION1.key4 = %s\n", 
+  UNIT_PRINT("SECTION1.key4 = %s\n",
       parser.Get("SECTION1", "key4").c_str());
-  
-  UNIT_PRINT("SECTION2.key = %s\n", 
+
+  UNIT_PRINT("SECTION2.key = %s\n",
       parser.Get("SECTION2", "key").c_str());
 }

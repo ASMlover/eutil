@@ -47,7 +47,7 @@ static inline uint64_t hrtime(void) {
 #endif
 }
 
-Condition::Condition(Mutex& mutex) 
+Condition::Condition(Mutex& mutex)
   : mutex_(mutex) {
   EL_ASSERT(0 == pthread_cond_init(&cond_, 0));
 }

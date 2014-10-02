@@ -40,7 +40,7 @@ UNIT_IMPL(ThreadFunction) {
 class ClassRoutine : private el::UnCopyable {
   ThreadPtr thread_;
 public:
-  ClassRoutine(void) 
+  ClassRoutine(void)
     : thread_(new el::Thread()) {
   }
 

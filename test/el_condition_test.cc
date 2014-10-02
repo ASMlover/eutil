@@ -37,7 +37,7 @@ public:
   CondWorker(void)
     : mutex_()
     , cond_(mutex_)
-    , signal_all_(false) 
+    , signal_all_(false)
     , posted_(false)
     , thread_(ThreadPtr(new el::Thread())) {
   }
@@ -48,7 +48,7 @@ public:
   inline void Run(void* arg) {
     el::Sleep(100);
     el::LockerGuard<el::Mutex> guard(mutex_);
-    
+
     EL_ASSERT(!posted_);
     if (signal_all_)
       cond_.SignalAll();

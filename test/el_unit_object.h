@@ -58,7 +58,7 @@ public:
   inline int id(void) const {
     return id_;
   }
-  
+
   inline void Show(void) {
     UNIT_PRINT(
         "%s {name=>'%s', id=>%d}\n", __func__, name_.c_str(), id_);

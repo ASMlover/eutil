@@ -33,12 +33,21 @@ namespace el {
 #define NANOSEC ((uint64_t)1e9)
 
 static inline uint64_t hrtime(void) {
+#if defined(EUTIL_LINUX)
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
   return (((uint64_t)ts.tv_sec) * NANOSEC + ts.tv_nsec);
+#elif defined(EUTIL_MAC)
+  mach_timebase_info_data_t info;
+  if (KERN_SUCCESS != mach_timebase_info(&info))
+    abort();
+  return mach_absolute_time() * info.numer / info.denom;
+#else
+# error "DOES NOT SUPPORT THIS PLATFORM !!!"
+#endif
 }
 
-Condition::Condition(Mutex& mutex) 
+Condition::Condition(Mutex& mutex)
   : mutex_(mutex) {
   EL_ASSERT(0 == pthread_cond_init(&cond_, 0));
 }

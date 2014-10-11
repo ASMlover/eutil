@@ -42,8 +42,8 @@ struct UnitCase {
   const char*    unit_name;
   const UnitType unit_case;
 
-  UnitCase(const char* name, const UnitType& unit) 
-    : unit_name(name) 
+  UnitCase(const char* name, const UnitType& unit)
+    : unit_name(name)
     , unit_case(unit) {
   }
 };

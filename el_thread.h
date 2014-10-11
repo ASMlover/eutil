@@ -40,7 +40,7 @@ typedef std::function<void (void*)> RoutinerType;
 
 #if defined(EUTIL_WIN)
 # include "./win/el_win_thread.h"
-#elif defined(EUTIL_LINUX)
+#else
 # include "./posix/el_posix_thread.h"
 #endif
 

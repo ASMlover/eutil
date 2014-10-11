@@ -30,16 +30,16 @@
 namespace el {
 
 enum class ColorType {
-  COLORTYPE_UNKNOWN = 0, 
-  COLORTYPE_RED, 
-  COLORTYPE_GREEN, 
+  COLORTYPE_UNKNOWN = 0,
+  COLORTYPE_RED,
+  COLORTYPE_GREEN,
 };
 
 extern int ColorPrintf(ColorType color, const char* format, ...);
-extern int ColorFprintf(FILE* stream, 
+extern int ColorFprintf(FILE* stream,
     ColorType color, const char* format, ...);
 
-extern int ColorVfprintf(FILE* stream, 
+extern int ColorVfprintf(FILE* stream,
     ColorType color, const char* format, va_list ap);
 
 }

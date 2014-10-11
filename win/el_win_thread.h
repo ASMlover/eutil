@@ -39,10 +39,10 @@ class Thread : private UnCopyable {
   RoutinerType routine_;
   void*        argument_;
 public:
-  Thread(void) 
-    : start_event_(nullptr) 
-    , thread_(nullptr) 
-    , routine_(nullptr) 
+  Thread(void)
+    : start_event_(nullptr)
+    , thread_(nullptr)
+    , routine_(nullptr)
     , argument_(nullptr) {
   }
 

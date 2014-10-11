@@ -37,10 +37,10 @@ UnitFramework::~UnitFramework(void) {
 int UnitFramework::Run(void) {
   fprintf(stdout, "====================BEGIN====================\n");
   for (const auto& unit : unit_list_) {
-    ColorPrintf(ColorType::COLORTYPE_GREEN, 
+    ColorPrintf(ColorType::COLORTYPE_GREEN,
         "\tRun UnitCase : %s\n", unit.unit_name);
     unit.unit_case();
-    ColorPrintf(ColorType::COLORTYPE_GREEN, 
+    ColorPrintf(ColorType::COLORTYPE_GREEN,
         "\tEnd UnitCase : %s\n", unit.unit_name);
     fprintf(stdout, "=============================================\n");
   }

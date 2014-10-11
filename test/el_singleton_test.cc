@@ -30,7 +30,7 @@ class SingleInteger : public el::Singleton<SingleInteger> {
   std::string name_;
   int         value_;
 public:
-  SingleInteger(void) 
+  SingleInteger(void)
     : name_("SingleInteger")
     , value_(0) {
   }
@@ -50,25 +50,25 @@ public:
 
 static void SingleFunction1(void) {
   UNIT_PRINT("%s\n", __func__);
-  
-  UNIT_PRINT("%s : %d\n", 
-      SingleInteger::Instance().name().c_str(), 
+
+  UNIT_PRINT("%s : %d\n",
+      SingleInteger::Instance().name().c_str(),
       SingleInteger::Instance().value());
   SingleInteger::Instance().Increment();
-  UNIT_PRINT("%s : %d\n", 
-      SingleInteger::Instance().name().c_str(), 
+  UNIT_PRINT("%s : %d\n",
+      SingleInteger::Instance().name().c_str(),
       SingleInteger::Instance().value());
 }
 
 static void SingleFunction2(void) {
   UNIT_PRINT("%s\n", __func__);
-  
-  UNIT_PRINT("%s : %d\n", 
-      SingleInteger::Instance().name().c_str(), 
+
+  UNIT_PRINT("%s : %d\n",
+      SingleInteger::Instance().name().c_str(),
       SingleInteger::Instance().value());
   SingleInteger::Instance().Increment();
-  UNIT_PRINT("%s : %d\n", 
-      SingleInteger::Instance().name().c_str(), 
+  UNIT_PRINT("%s : %d\n",
+      SingleInteger::Instance().name().c_str(),
       SingleInteger::Instance().value());
 }
 

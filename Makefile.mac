@@ -25,12 +25,30 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# Just for testing IniParser
-[SECTION1]
-key1= Value1  # string value
-key2 = Value2 # string value
-key3 = 1000   # integer value
-key4 = 100.00 # integer value
+OUT	= eutil
+RM	= rm 
+CC	= clang++
+CFLAGS	= -g -O2 -Wall -std=c++0x
+LDFLAGS	= -lpthread -lc
+OBJS	= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc ./posix/*.cc *.cc))
 
-[SECTION2]
-key = value   # string value
+
+
+
+
+all: $(OUT)
+
+rebuild: clean all 
+
+clean:
+	$(RM) $(OUT) $(OBJS)
+
+
+
+
+
+$(OUT): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+$(OBJS): %.o: %.cc
+	$(CC) -o $*.o -c $(CFLAGS) $^

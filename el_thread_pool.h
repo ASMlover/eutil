@@ -33,13 +33,13 @@ struct Worker {
   RoutinerType routine;
   void*        argument;
 
-  Worker(const RoutinerType& worker = nullptr, void* arg = nullptr) 
+  Worker(const RoutinerType& worker = nullptr, void* arg = nullptr)
     : routine(worker)
     , argument(arg) {
   }
 
   void Run(void) {
-    if (nullptr != routine) 
+    if (nullptr != routine)
       routine(argument);
   }
 };

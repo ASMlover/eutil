@@ -30,7 +30,7 @@
 UNIT_IMPL(Time) {
   el::Time t;
   EL_ASSERT(el::GetTime(t));
-  UNIT_PRINT("%04d-%02d-%02d %2d:%02d:%02d:%03d\n", 
+  UNIT_PRINT("%04d-%02d-%02d %2d:%02d:%02d:%03d\n",
       t.year, t.mon, t.day, t.hour, t.min, t.sec, t.millitm);
 
   uint64_t old = el::GetTick();

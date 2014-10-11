@@ -24,54 +24,54 @@
 // LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-#ifndef __EL_POSIX_THREAD_HEADER_H__
-#define __EL_POSIX_THREAD_HEADER_H__
+#ifndef __EL_MAC_LOCKER_HEADER_H__
+#define __EL_MAC_LOCKER_HEADER_H__
 
 namespace el {
 
-class Thread : private UnCopyable {
-  pthread_t    thread_id_;
-  RoutinerType routine_;
-  void*        argument_;
+class Mutex : private UnCopyable {
+  pthread_mutex_t mutex_;
 public:
-  Thread(void)
-    : thread_id_(0)
-    , routine_(nullptr)
-    , argument_(nullptr) {
+  Mutex(void) {
+    EL_ASSERT(0 == pthread_mutex_init(&mutex_, nullptr));
   }
 
-  ~Thread(void) {
-    Join();
+  ~Mutex(void) {
+    EL_ASSERT(0 == pthread_mutex_destroy(&mutex_));
   }
 
-  void Create(const RoutinerType& routine, void* argument = nullptr) {
-    routine_ = routine;
-    argument_ = argument;
-
-    EL_ASSERT(0 == pthread_create(
-          &thread_id_, nullptr, &Thread::Routine, this));
+  inline void Lock(void) {
+    EL_ASSERT(0 == pthread_mutex_lock(&mutex_));
   }
 
-  void Join(void) {
-    if (0 != thread_id_) {
-      EL_ASSERT(0 == pthread_join(thread_id_, 0));
-
-      thread_id_ = 0;
-    }
+  inline void Unlock(void) {
+    EL_ASSERT(0 == pthread_mutex_unlock(&mutex_));
   }
-private:
-  static void* Routine(void* argument) {
-    Thread* self = static_cast<Thread*>(argument);
-    if (nullptr == self)
-      return nullptr;
 
-    if (nullptr != self->routine_)
-      self->routine_(self->argument_);
+  inline pthread_mutex_t* mutex(void) const {
+    return const_cast<pthread_mutex_t*>(&mutex_);
+  }
+};
 
-    return nullptr;
+class SpinLock : private UnCopyable {
+  OSSpinLock spinlock_;
+public:
+  SpinLock(void)
+    : spinlock_(0) {
+  }
+
+  ~SpinLock(void) {
+  }
+
+  inline void Lock(void) {
+    OSSpinLockLock(&spinlock_);
+  }
+
+  inline void Unlock(void) {
+    OSSpinLockUnlock(&spinlock_);
   }
 };
 
 }
 
-#endif  // __EL_POSIX_THREAD_HEADER_H__
+#endif  // __EL_MAC_LOCKER_HEADER_H__

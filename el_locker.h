@@ -59,6 +59,8 @@ public:
 # include "./win/el_win_locker.h"
 #elif defined(EUTIL_LINUX)
 # include "./posix/el_posix_locker.h"
+#elif defined(EUTIL_MAC)
+# include "./mac/el_mac_locker.h"
 #endif
 
 #endif  // __EL_LOCKER_HEADER_H__

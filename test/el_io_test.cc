@@ -33,8 +33,8 @@ UNIT_IMPL(IO) {
   el::ColorPrintf(
       el::ColorType::COLORTYPE_RED, "\t\tel::ColorPrintf test\n");
 
-  el::ColorFprintf(stdout, 
+  el::ColorFprintf(stdout,
       el::ColorType::COLORTYPE_GREEN, "\t\tel::ColorFprintf test\n");
-  el::ColorFprintf(stdout, 
+  el::ColorFprintf(stdout,
       el::ColorType::COLORTYPE_RED, "\t\tel_ColorFprintf test\n");
 }

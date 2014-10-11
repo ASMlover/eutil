@@ -36,7 +36,7 @@ static inline int logging_mkdir(const char* path) {
   int ret = -1;
 #if defined(EUTIL_WIN)
   ret = mkdir(path);
-#elif defined(EUTIL_LINUX)
+#else
   int mode = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
   ret = mkdir(path, mode);
 #endif

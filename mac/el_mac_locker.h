@@ -24,43 +24,54 @@
 // LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-#ifndef __EL_LOCKER_HEADER_H__
-#define __EL_LOCKER_HEADER_H__
+#ifndef __EL_MAC_LOCKER_HEADER_H__
+#define __EL_MAC_LOCKER_HEADER_H__
 
 namespace el {
 
-// Helper class to Lock and Unlock a Locker automatically.
-template <typename Locker>
-class LockerGuard : private UnCopyable {
-  Locker& locker_;
+class Mutex : private UnCopyable {
+  pthread_mutex_t mutex_;
 public:
-  explicit LockerGuard(Locker& locker)
-    : locker_(locker) {
-    locker_.Lock();
+  Mutex(void) {
+    EL_ASSERT(0 == pthread_mutex_init(&mutex_, nullptr));
   }
 
-  ~LockerGuard(void) {
-    locker_.Unlock();
+  ~Mutex(void) {
+    EL_ASSERT(0 == pthread_mutex_destroy(&mutex_));
+  }
+
+  inline void Lock(void) {
+    EL_ASSERT(0 == pthread_mutex_lock(&mutex_));
+  }
+
+  inline void Unlock(void) {
+    EL_ASSERT(0 == pthread_mutex_unlock(&mutex_));
+  }
+
+  inline pthread_mutex_t* mutex(void) const {
+    return const_cast<pthread_mutex_t*>(&mutex_);
   }
 };
 
-class DummyLock : private UnCopyable {
+class SpinLock : private UnCopyable {
+  OSSpinLock spinlock_;
 public:
-  DummyLock(void) {}
-  ~DummyLock(void) {}
+  SpinLock(void)
+    : spinlock_(0) {
+  }
 
-  inline void Lock(void) {}
-  inline void Unlock(void) {}
+  ~SpinLock(void) {
+  }
+
+  inline void Lock(void) {
+    OSSpinLockLock(&spinlock_);
+  }
+
+  inline void Unlock(void) {
+    OSSpinLockUnlock(&spinlock_);
+  }
 };
 
 }
 
-#if defined(EUTIL_WIN)
-# include "./win/el_win_locker.h"
-#elif defined(EUTIL_LINUX)
-# include "./posix/el_posix_locker.h"
-#elif defined(EUTIL_MAC)
-# include "./mac/el_mac_locker.h"
-#endif
-
-#endif  // __EL_LOCKER_HEADER_H__
+#endif  // __EL_MAC_LOCKER_HEADER_H__

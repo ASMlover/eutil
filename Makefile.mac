@@ -29,7 +29,7 @@ OUT	= eutil
 RM	= rm 
 CC	= clang++
 CFLAGS	= -g -O2 -Wall -std=c++0x
-LDFLAGS	= -lpthread
+LDFLAGS	= -lpthread -lc
 OBJS	= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc ./posix/*.cc *.cc))
 
 

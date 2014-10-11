@@ -78,6 +78,7 @@
 # if defined(EUTIL_MAC)
 #   include <mach/mach.h>
 #   include <mach/mach_time.h>
+#   include <libkern/OSAtomic.h>
 # endif
 #endif
 

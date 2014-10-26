@@ -154,6 +154,11 @@
 # ifndef snprintf
 #   define snprintf _snprintf
 # endif
+
+# define EL_ARRAY(type, name, size)\
+    type* name = (type*)_alloca((size) * sizeof(type))
+#else
+# define EL_ARRAY(type, name, size) type name[size]
 #endif
 
 #include "el_uncopyable.h"

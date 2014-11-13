@@ -30,10 +30,6 @@
 #include <typeinfo>
 #include "eutil.h"
 
-#if defined(EUTIL_WIN)
-# define __func__ __FUNCTION__
-#endif
-
 namespace el {
 
 struct UnitCase {

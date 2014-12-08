@@ -43,7 +43,7 @@ OBJS	= el_main.obj el_locker_test.obj el_condition_test.obj\
 	el_win_io.obj el_win_condition.obj\
 	\
 	el_io.obj el_time.obj el_thread_pool.obj el_logging.obj el_unit.obj\
-	el_symbol_table.obj el_ini_parser.obj
+	el_symbol_table.obj el_ini_parser.obj el_mini_buffer.obj
 
 
 

@@ -25,12 +25,16 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-OUT	= eutil
+OUT_LIB	= libeutil.a
+OUT_BIN	= eutil
+OUT	= $(OUT_LIB) $(OUT_BIN)
 RM	= rm 
 CC	= g++
 CFLAGS	= -g -O2 -Wall -std=c++0x
-LDFLAGS	= -lpthread -lrt
-OBJS	= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc ./posix/*.cc *.cc))
+LDFLAGS	= -L. -leutil -lpthread -lrt
+OBJS_LIB= $(patsubst %.cc, %.o, $(wildcard ./posix/*.cc *.cc))
+OBJS_BIN= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc))
+OBJS	= $(OBJS_LIB) $(OBJS_BIN)
 
 
 
@@ -47,7 +51,10 @@ clean:
 
 
 
-$(OUT): $(OBJS)
+$(OUT_LIB): $(OBJS_LIB)
+	$(AR) -cru $@ $^
+
+$(OUT_BIN): $(OBJS_BIN)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJS): %.o: %.cc

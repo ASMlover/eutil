@@ -64,7 +64,7 @@
 # include <io.h>
 # include <direct.h>
 
-# undef
+# undef __func__
 # define __func__ __FUNCSIG__
 #else
 # include <sys/types.h>

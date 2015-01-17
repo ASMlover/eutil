@@ -30,6 +30,7 @@ OUT_BIN	= eutil
 OUT	= $(OUT_LIB) $(OUT_BIN)
 RM	= rm 
 CC	= g++
+AR	= ar
 CFLAGS	= -g -O2 -Wall -std=c++0x
 LDFLAGS	= -L. -leutil -lpthread -lrt
 OBJS_LIB= $(patsubst %.cc, %.o, $(wildcard ./posix/*.cc *.cc))

@@ -59,27 +59,27 @@
 // SYSTEM INTERFACES HEADERS
 #if defined(EUTIL_WIN)
 # include <windows.h>
+# include <direct.h>
 # include <mmsystem.h>
 # include <process.h>
 # include <io.h>
-# include <direct.h>
 
 # undef __func__
 # define __func__ __FUNCSIG__
 #else
-# include <sys/types.h>
-# include <sys/time.h>
 # include <sys/stat.h>
-# include <unistd.h>
+# include <sys/time.h>
+# include <sys/types.h>
 # include <fcntl.h>
-# include <pthread.h>
 # include <limits.h>
+# include <pthread.h>
+# include <unistd.h>
 
 # define MAX_PATH PATH_MAX
 # if defined(EUTIL_MAC)
+#   include <libkern/OSAtomic.h>
 #   include <mach/mach.h>
 #   include <mach/mach_time.h>
-#   include <libkern/OSAtomic.h>
 # endif
 #endif
 
@@ -95,14 +95,14 @@
 // ANSI C++ HEADERS
 #include <functional>
 #include <memory>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 // STL HEADERS
 #include <algorithm>
 #include <map>
-#include <unordered_map>
 #include <queue>
+#include <unordered_map>
 #include <vector>
 
 // Have our own assert, so we are sure it does not get

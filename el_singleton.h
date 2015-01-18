@@ -33,19 +33,19 @@ template <typename Object, typename Locker = DummyLock>
 class Singleton : private UnCopyable {
 public:
   static Object& Instance(void) {
-    static Object* s_instance = nullptr;
-    static Locker  s_locker;
+    static Object* _instance = nullptr;
+    static Locker  _locker;
 
-    if (nullptr == s_instance) {
-      LockerGuard<Locker> guard(s_locker);
+    if (nullptr == _instance) {
+      LockerGuard<Locker> guard(_locker);
 
-      if (nullptr == s_instance) {
+      if (nullptr == _instance) {
         static Object s_object;
-        s_instance = &s_object;
+        _instance = &s_object;
       }
     }
 
-    return *s_instance;
+    return *_instance;
   }
 };
 

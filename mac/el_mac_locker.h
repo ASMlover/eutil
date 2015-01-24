@@ -53,24 +53,9 @@ public:
   }
 };
 
-class SpinLock : private UnCopyable {
-  OSSpinLock spinlock_;
-public:
-  SpinLock(void)
-    : spinlock_(0) {
-  }
-
-  ~SpinLock(void) {
-  }
-
-  inline void Lock(void) {
-    OSSpinLockLock(&spinlock_);
-  }
-
-  inline void Unlock(void) {
-    OSSpinLockUnlock(&spinlock_);
-  }
-};
+// don't know why it's crashed by using OSSpinLock, 
+// so defined it as Mutex
+typedef Mutex SpinLock;
 
 }
 

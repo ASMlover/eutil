@@ -55,7 +55,7 @@ OBJS	= $(OBJS_LIB) $(OBJS_BIN)
 
 all: $(OUT)
 
-rebuild: clean all 
+rebuild: clean all
 
 clean:
 	$(RM) $(OUT) $(OBJS) *.pdb *.ilk *.manifest

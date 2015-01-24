@@ -17,11 +17,11 @@
   * **Mac OS X**
 
         $ cd eutil
-        $ make -f Makefile.mac
+        $ make -f Makefile.mac.mk
 
   * **Windows**
 
         Step1: Setting enviroment for using MSVC(VS2012+).
         Step2:
           \> cd eutil
-          \> nmake -f Makefile.mk
+          \> nmake -f Makefile.win.mk

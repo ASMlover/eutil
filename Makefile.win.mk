@@ -38,16 +38,16 @@ CFLAGS	= -O2 -W3 -MDd -GS -Zi -Fd"vc.pdb" -EHsc -D_DEBUG\
 LDFLAGS	= -INCREMENTAL -DEBUG -PDB:$(OUT_BIN).pdb -manifest\
 	-manifestfile:$(OUT_BIN).manifest -manifestuac:no\
 	winmm.lib libeutil.lib
-OBJS_LIB= el_win_io.obj el_win_condition.obj\
+LIBOBJS	= el_win_io.obj el_win_condition.obj\
 	\
 	el_io.obj el_time.obj el_thread_pool.obj el_logging.obj el_unit.obj\
 	el_symbol_table.obj el_ini_parser.obj el_mini_buffer.obj
-OBJS_BIN= el_main.obj el_locker_test.obj el_condition_test.obj\
+BINOBJS	= el_main.obj el_locker_test.obj el_condition_test.obj\
 	el_singleton_test.obj el_object_pool_test.obj el_object_mgr_test.obj\
 	el_thread_test.obj el_thread_pool_test.obj el_logging_test.obj\
 	el_time_test.obj el_symbol_table_test.obj el_io_test.obj\
 	el_ini_parser_test.obj
-OBJS	= $(OBJS_LIB) $(OBJS_BIN)
+OBJS	= $(LIBOBJS) $(BINOBJS)
 
 
 
@@ -64,11 +64,11 @@ clean:
 
 
 
-$(OUT_LIB): $(OBJS_LIB)
-	$(AR) -out:$(OUT_LIB) $(OBJS_LIB)
+$(OUT_LIB): $(LIBOBJS)
+	$(AR) -out:$(OUT_LIB) $(LIBOBJS)
 
-$(OUT_BIN): $(OBJS_BIN)
-	$(LINK) -out:$(OUT_BIN) $(OBJS_BIN) $(LDFLAGS)
+$(OUT_BIN): $(BINOBJS)
+	$(LINK) -out:$(OUT_BIN) $(BINOBJS) $(LDFLAGS)
 	$(MT) -manifest $(OUT_BIN).manifest -outputresource:$(OUT_BIN);1
 
 .cc.obj:

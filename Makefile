@@ -33,9 +33,9 @@ CC	= g++
 AR	= ar
 CFLAGS	= -g -O2 -Wall -std=c++0x
 LDFLAGS	= -L. -leutil -lpthread -lrt
-OBJS_LIB= $(patsubst %.cc, %.o, $(wildcard ./posix/*.cc *.cc))
-OBJS_BIN= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc))
-OBJS	= $(OBJS_LIB) $(OBJS_BIN)
+LIBOBJS	= $(patsubst %.cc, %.o, $(wildcard ./posix/*.cc *.cc))
+BINOBJS	= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc))
+OBJS	= $(LIBOBJS) $(BINOBJS)
 
 
 
@@ -52,10 +52,10 @@ clean:
 
 
 
-$(OUT_LIB): $(OBJS_LIB)
+$(OUT_LIB): $(LIBOBJS)
 	$(AR) -cru $@ $^
 
-$(OUT_BIN): $(OBJS_BIN)
+$(OUT_BIN): $(BINOBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJS): %.o: %.cc

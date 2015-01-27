@@ -27,7 +27,11 @@
 #ifndef __EUTIL_HEADER_H__
 #define __EUTIL_HEADER_H__
 
-#if !defined(EUTIL_WIN) && !defined(EUTIL_LINUX) && !defined(EUTIL_MAC)
+#if !defined(EUTIL_WIN) || !defined(EUTIL_LINUX) || !defined(EUTIL_MAC)
+# undef EUTIL_WIN
+# undef EUTIL_LINUX
+# undef EUTIL_MAC
+
 # if defined(_WINDOWS_) || defined(_MSC_VER) || defined(__MINGW32)
 #   define EUTIL_WIN
 # elif defined(WIN32_LEAN_AND_MEAN)
@@ -89,6 +93,7 @@
 #endif
 
 // ANSI C HEADERS
+#include <assert.h>
 #include <sys/timeb.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -112,22 +117,20 @@
 
 // Have our own assert, so we are sure it does not get
 // optomized away in a release build.
-#if !defined(EL_ASSERT)
 # include "el_io.h"
 # define EL_ASSERT(condition) do {\
-    if (!(condition)) {\
-      el::ColorFprintf(stderr, \
-          el::ColorType::COLORTYPE_RED, \
-          "[%s:%d] Assertion failed in %s(): %s\n", \
-          __FILE__, \
-          __LINE__, \
-          __func__, \
-          #condition);\
-      fflush(stderr);\
-      abort();\
-    }\
-  } while (0)
-#endif
+  if (!(condition)) {\
+    el::ColorFprintf(stderr, \
+        el::ColorType::COLORTYPE_RED, \
+        "[%s:%d] Assertion failed in %s(): %s\n", \
+        __FILE__, \
+        __LINE__, \
+        __func__, \
+        #condition);\
+    fflush(stderr);\
+    abort();\
+  }\
+} while (0)
 
 #define EL_ASSERTX(condition, message) do {\
   if (!(condition)) {\

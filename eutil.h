@@ -149,7 +149,7 @@
 // Assertion to indicate that the given point in
 // the code should never be reached.
 #define EL_UNREACHABLE()\
-  EL_ASSERTX(false, "This line shuld not be reached.")
+  EL_ASSERTX(false, "This line should not be reached.")
 
 #if !defined(MIN)
 # define MIN(x, y)  ((x) < (y) ? (x) : (y))

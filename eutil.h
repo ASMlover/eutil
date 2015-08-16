@@ -117,8 +117,8 @@
 
 // Have our own assert, so we are sure it does not get
 // optomized away in a release build.
-# include "el_io.h"
-# define EL_ASSERT(condition) do {\
+#include "el_io.h"
+#define EL_ASSERT(condition) do {\
   if (!(condition)) {\
     el::ColorFprintf(stderr, \
         el::ColorType::COLORTYPE_RED, \

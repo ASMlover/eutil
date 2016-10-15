@@ -28,7 +28,7 @@
 OUT_LIB	= libeutil.a
 OUT_BIN	= eutil
 OUT	= $(OUT_LIB) $(OUT_BIN)
-RM	= rm 
+RM	= rm -fv
 CC	= clang++
 AR	= ar
 CFLAGS	= -g -O2 -Wall -std=c++0x
@@ -37,26 +37,14 @@ LIBOBJS	= $(patsubst %.cc, %.o, $(wildcard ./posix/*.cc ./mac/*.cc *.cc))
 BINOBJS	= $(patsubst %.cc, %.o, $(wildcard ./test/*.cc))
 OBJS	= $(LIBOBJS) $(BINOBJS)
 
-
-
-
-
 all: $(OUT)
-
 rebuild: clean all
-
 clean:
 	$(RM) $(OUT) $(OBJS)
 
-
-
-
-
 $(OUT_LIB): $(LIBOBJS)
 	$(AR) -cru $@ $^
-
 $(OUT_BIN): $(BINOBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
-
 $(OBJS): %.o: %.cc
 	$(CC) -o $*.o -c $(CFLAGS) $^

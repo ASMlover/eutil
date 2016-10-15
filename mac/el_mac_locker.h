@@ -53,7 +53,7 @@ public:
   }
 };
 
-// don't know why it's crashed by using OSSpinLock, 
+// don't know why it's crashed by using OSSpinLock,
 // so defined it as Mutex
 typedef Mutex SpinLock;
 

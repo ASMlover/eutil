@@ -48,9 +48,9 @@ class ThreadPool : private UnCopyable {
   enum {MIN_THREADS = 8, MAX_THREADS = 64};
   typedef std::shared_ptr<Thread> ThreadPtr;
 
-  bool      running_;
-  Mutex     mutex_;
-  Condition cond_;
+  bool          running_;
+  mutable Mutex mutex_;
+  Condition     cond_;
 
   std::vector<ThreadPtr> threads_;
   std::queue<Worker>     workers_;

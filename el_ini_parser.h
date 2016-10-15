@@ -31,7 +31,7 @@ namespace el {
 
 class IniLexer;
 class IniParser : private UnCopyable {
-  typedef std::shared_ptr<IniLexer>                     IniLexerPtr;
+  typedef std::unique_ptr<IniLexer>                     IniLexerPtr;
   typedef std::unordered_map<std::string, std::string>  IniValueMap;
 
   IniLexerPtr lexer_;

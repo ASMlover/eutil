@@ -28,7 +28,7 @@
 OUT_LIB	= libeutil.lib
 OUT_BIN	= eutil.exe
 OUT	= $(OUT_LIB) $(OUT_BIN)
-RM	= del 
+RM	= del /s /f
 CC	= cl -c -nologo
 AR	= lib -nologo
 MT	= mt -nologo
@@ -49,33 +49,19 @@ BINOBJS	= el_main.obj el_locker_test.obj el_condition_test.obj\
 	el_ini_parser_test.obj
 OBJS	= $(LIBOBJS) $(BINOBJS)
 
-
-
-
-
 all: $(OUT)
-
 rebuild: clean all
-
 clean:
 	$(RM) $(OUT) $(OBJS) *.pdb *.ilk *.manifest
 
-
-
-
-
 $(OUT_LIB): $(LIBOBJS)
 	$(AR) -out:$(OUT_LIB) $(LIBOBJS)
-
 $(OUT_BIN): $(BINOBJS)
 	$(LINK) -out:$(OUT_BIN) $(BINOBJS) $(LDFLAGS)
 	$(MT) -manifest $(OUT_BIN).manifest -outputresource:$(OUT_BIN);1
-
 .cc.obj:
 	$(CC) $(CFLAGS) $<
-
 {.\win}.cc{}.obj:
 	$(CC) $(CFLAGS) $<
-
 {.\test}.cc{}.obj:
 	$(CC) $(CFLAGS) $<

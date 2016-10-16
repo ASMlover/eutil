@@ -35,8 +35,8 @@ static int CondInit(CondVar& cond) {
 
   int err;
   do {
-    cond.single_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-    if (nullptr == cond.single_event) {
+    cond.signal_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    if (nullptr == cond.signal_event) {
       err = static_cast<int>(GetLastError());
       break;
     }
@@ -50,8 +50,8 @@ static int CondInit(CondVar& cond) {
     return 0;
   } while (0);
 
-  if (nullptr != cond.single_event)
-    CloseHandle(cond.single_event);
+  if (nullptr != cond.signal_event)
+    CloseHandle(cond.signal_event);
   DeleteCriticalSection(&cond.waiters_count_lock);
 
   return err;
@@ -59,7 +59,7 @@ static int CondInit(CondVar& cond) {
 
 static int CondWaitHelper(
     CondVar& cond, Mutex& mutex, DWORD millitm) {
-  HANDLE handles[2] = {cond.single_event, cond.broadcast_event};
+  HANDLE handles[2] = {cond.signal_event, cond.broadcast_event};
 
   EnterCriticalSection(&cond.waiters_count_lock);
   ++cond.waiters_count;
@@ -98,7 +98,7 @@ Condition::Condition(Mutex& mutex)
 
 Condition::~Condition(void) {
   EL_ASSERT(CloseHandle(cond_.broadcast_event));
-  EL_ASSERT(CloseHandle(cond_.single_event));
+  EL_ASSERT(CloseHandle(cond_.signal_event));
   DeleteCriticalSection(&cond_.waiters_count_lock);
 }
 
@@ -110,7 +110,7 @@ void Condition::Signal(void) {
   LeaveCriticalSection(&cond_.waiters_count_lock);
 
   if (have_waiters)
-    SetEvent(cond_.single_event);
+    SetEvent(cond_.signal_event);
 }
 
 void Condition::SignalAll(void) {

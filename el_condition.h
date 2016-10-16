@@ -31,7 +31,7 @@
   typedef struct {
     uint32_t         waiters_count;
     CRITICAL_SECTION waiters_count_lock;
-    HANDLE           single_event;
+    HANDLE           signal_event;
     HANDLE           broadcast_event;
   } CondVar;
 #else

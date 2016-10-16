@@ -51,7 +51,7 @@ class IniLexer : private UnCopyable {
     STATE_COMMENT,
   };
 
-  typedef std::shared_ptr<FILE> FilePtr;
+  typedef std::unique_ptr<FILE, decltype(fclose)*> FilePtr;
 
   int     lineno_;
   int     bsize_;
@@ -81,7 +81,7 @@ IniLexer::IniLexer(void)
   : lineno_(1)
   , bsize_(0)
   , eof_(false)
-  , file_(FilePtr(nullptr))
+  , file_(FilePtr(nullptr, fclose))
   , lexpos_(0) {
 }
 
@@ -89,7 +89,7 @@ IniLexer::~IniLexer(void) {
 }
 
 bool IniLexer::Open(const char* fname) {
-  file_.reset(fopen(fname, "r"), fclose);
+  file_.reset(fopen(fname, "r"));
   if (!file_)
     return false;
 
@@ -237,7 +237,7 @@ Type IniLexer::LexerComment(
 
 
 IniParser::IniParser(void)
-  : lexer_(IniLexerPtr(new IniLexer()))
+  : lexer_(new IniLexer())
   , section_("") {
 }
 
